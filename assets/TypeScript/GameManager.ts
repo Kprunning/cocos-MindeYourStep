@@ -1,4 +1,4 @@
-import {_decorator, Component, instantiate, Node, Prefab, Vec3} from 'cc'
+import {_decorator, Component, instantiate, Label, Node, Prefab, Vec3} from 'cc'
 import {PlayerController} from './PlayerController'
 
 const {ccclass, property} = _decorator
@@ -34,6 +34,9 @@ export class GameManager extends Component {
 
   @property({type: Node})
   public startMenu: Node | null = null
+
+  @property({type: Label})
+  public stepsLabel: Label | null = null
 
   private _road: BlockType[] = []
 
@@ -107,6 +110,10 @@ export class GameManager extends Component {
         if (this.startMenu) {
           this.startMenu.active = false
         }
+        // 清空上局分数
+        if (this.stepsLabel) {
+          this.stepsLabel.string = '0'
+        }
         // 设置active为true时会直接开始监听鼠标事件,此时鼠标抬起事件还未派发
         // 会出现的现象就是,游戏开始的瞬间人物已经开始移动
         // 因此,这里需要做有延迟处理
@@ -140,6 +147,9 @@ export class GameManager extends Component {
   }
 
   onPlayJumpEnd(moveIndex: number) {
+    if (this.stepsLabel) {
+      this.stepsLabel.string = '' + (moveIndex > this.roadLength ? this.roadLength : moveIndex)
+    }
     this.checkResult(moveIndex)
   }
 
