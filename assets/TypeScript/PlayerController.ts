@@ -64,7 +64,6 @@ export class PlayerController extends Component {
     this.node.getPosition(this._curPos)
     Vec3.add(this._targetPos, this._curPos, new Vec3(this._jumpStep, 0, 0))
     this._curMoveIndex += step
-    this.onOnceJumpEnd()
   }
 
   onOnceJumpEnd() {
@@ -76,17 +75,13 @@ export class PlayerController extends Component {
     this._curMoveIndex = 0
   }
 
-
-  start() {
-    // input.on(Input.EventType.MOUSE_UP, this.onMouseUp, this)
-  }
-
   update(deltaTime: number) {
     if (this._startJump) {
       this._curJumpTime += deltaTime
       if (this._curJumpTime > this._jumpTime) {
         this.node.setPosition(this._targetPos)
         this._startJump = false
+        this.onOnceJumpEnd()
       } else {
         this.node.getPosition(this._curPos)
         this._deltaPos.x = this._curJumpSpeed * deltaTime
